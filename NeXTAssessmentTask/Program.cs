@@ -11,23 +11,22 @@ namespace NeXTAssessmentTask
         {
             try
             {
-                Console.WriteLine("ENTER THE DATE AND TIME (eg: 23/07/2021 6:51pm) : ");
+                Console.Write("ENTER THE DATE AND TIME (eg: 23/07/2021 6:51pm) : ");
                 DateTime inputDate = GetDate();
                 DateTime currentDate = DateTime.Now;
 
                 if (inputDate > currentDate)
                 {
-                    Console.WriteLine("INVALID DATE! PLEASE ENTER A CURRENT/PAST DATE : ");
+                    Console.Write("INVALID DATE! PLEASE ENTER A CURRENT/PAST DATE : ");
                     inputDate = GetDate();
-                    GetISSLocation(inputDate);
+                    GetTimestamps(inputDate);
                 } else
                 {
-                    GetISSLocation(inputDate);
+                    GetTimestamps(inputDate);
                 }
 
                 inputDate = inputDate.AddHours(8);                
 
-                //Console.WriteLine();
             }
             catch (Exception ex)
             {
@@ -46,56 +45,71 @@ namespace NeXTAssessmentTask
             return inputDate;
         }
 
-        static void GetISSLocation(DateTime date)
+        static void GetTimestamps(DateTime date)
         {
+            String urlTimestamps = "";
+
             DateTime univDate = date.ToUniversalTime();
             univDate = univDate.AddMinutes(-60);
 
-            Console.WriteLine("THE LOCATION OF ISS AT THIS TIME : ");
+            Console.WriteLine("Retrieving location... ");
             Console.WriteLine();
 
-            //long[] unixTimestamps = new long[13];
+            DateTime[] dateList = new DateTime[13];
+            long[] unixTimestamps = new long[13];
+
             for (int loop = 0; loop < 13; loop++)
             {
+                dateList[loop] = univDate; 
                 long unixTime = ((DateTimeOffset)univDate).ToUnixTimeSeconds();
 
-                //unixTimestamps[loop] = unixTime;
+                unixTimestamps[loop] = unixTime;
+                                                
+                urlTimestamps = loop == 0 ? unixTimestamps[loop].ToString() : urlTimestamps + "," + unixTimestamps[loop].ToString();
 
-                Console.WriteLine(loop + 1 + ". " + univDate + " (UTC +0) " + unixTime);
-                Console.WriteLine();
+                univDate = univDate.AddMinutes(10);                
+            }
 
-                univDate = univDate.AddMinutes(10);
+            GetISSLocation(urlTimestamps, dateList);
+        }
 
-                #region - calling API 
-                HttpClient client = new HttpClient();
-                var responseTask = client.GetAsync("https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=" + unixTime + "&units=miles");
+        static void GetISSLocation( String url, DateTime[] date)
+        {
+            #region - calling API 
+            HttpClient client = new HttpClient();
+            var responseTask = client.GetAsync("https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=" + url + "&units=miles");
 
-                responseTask.Wait();
+            responseTask.Wait();
+            #endregion
 
-                if (responseTask.IsCompleted)
+            if (responseTask.IsCompleted)
+            {
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
                 {
-                    var result = responseTask.Result;
-                    if (result.IsSuccessStatusCode)
+                    var messageTask = result.Content.ReadAsStringAsync();
+                    messageTask.Wait();
+
+                    List<Location> location = JsonConvert.DeserializeObject<List<Location>>(messageTask.Result);
+
+                    int loop = 0;
+                    foreach (var item in location)
                     {
-                        var messageTask = result.Content.ReadAsStringAsync();
-                        messageTask.Wait();
+                        #region - Get data from API based on latitude and longitude
+                        var response = client.GetStringAsync("https://api.wheretheiss.at/v1/coordinates/" + item.latitude + "," + item.longitude);
 
-                        List<Location> location = JsonConvert.DeserializeObject<List<Location>>(messageTask.Result);
+                        var json = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result);
+                        var formattedJson = Newtonsoft.Json.JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.Indented);
 
-                        foreach (var item in location)
-                        {
-                            #region - Get data from API based on latitude and longitude
-                            var response = client.GetStringAsync("https://api.wheretheiss.at/v1/coordinates/" + item.latitude + "," + item.longitude);
+                        Console.WriteLine(loop + 1 + ". " + date[loop] + " (UTC +0) ");
+                        Console.WriteLine();
+                        Console.WriteLine(formattedJson);
+                        Console.WriteLine();
 
-                            var json = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result);
-                            var formattedJson = Newtonsoft.Json.JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.Indented);
-                            Console.WriteLine(formattedJson);
-                            Console.WriteLine();
-                            #endregion
-                        }
+                        loop++;
+                        #endregion
                     }
                 }
-                #endregion
             }
         }
 
