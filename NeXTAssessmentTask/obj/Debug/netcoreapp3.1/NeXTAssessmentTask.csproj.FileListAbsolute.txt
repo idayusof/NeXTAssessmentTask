@@ -1,0 +1,13 @@
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\bin\Debug\netcoreapp3.1\NeXTAssessmentTask.exe
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\bin\Debug\netcoreapp3.1\NeXTAssessmentTask.deps.json
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\bin\Debug\netcoreapp3.1\NeXTAssessmentTask.runtimeconfig.json
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\bin\Debug\netcoreapp3.1\NeXTAssessmentTask.runtimeconfig.dev.json
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\bin\Debug\netcoreapp3.1\NeXTAssessmentTask.dll
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\bin\Debug\netcoreapp3.1\NeXTAssessmentTask.pdb
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.GeneratedMSBuildEditorConfig.editorconfig
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.AssemblyInfoInputs.cache
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.AssemblyInfo.cs
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.csproj.CoreCompileInputs.cache
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.dll
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.pdb
+D:\ABATA\NeXTAssessmentTask\NeXTAssessmentTask\obj\Debug\netcoreapp3.1\NeXTAssessmentTask.genruntimeconfig.cache
