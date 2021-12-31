@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace NeXTAssessmentTask
@@ -32,7 +34,7 @@ namespace NeXTAssessmentTask
 
                     univDate = univDate.AddMinutes(10);
 
-                    #region - calling API based on timestamps
+                    #region - calling API 
                     HttpClient client = new HttpClient();
                     var responseTask = client.GetAsync("https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=" + unixTime + "&units=miles");
 
@@ -48,15 +50,36 @@ namespace NeXTAssessmentTask
 
                             Console.WriteLine(messageTask.Result);
                             Console.WriteLine();
+
+                            List<Location> location = JsonConvert.DeserializeObject<List<Location>>(messageTask.Result);
+
+                            foreach (var item in location)
+                            {
+                                #region - Get data from API based on latitude and longitude
+                                var response = client.GetStringAsync("https://api.wheretheiss.at/v1/coordinates/" + item.latitude + "," + item.longitude);
+
+                                var json = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result);
+                                var formattedJson = Newtonsoft.Json.JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.Indented);
+                                Console.WriteLine(formattedJson);
+                                #endregion
+                            }
                         }
                     }
                     #endregion
                 }
+
+                Console.WriteLine();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        class Location
+        {
+            public float latitude { get; set; }
+            public float longitude { get; set; }
         }
     }
 }
