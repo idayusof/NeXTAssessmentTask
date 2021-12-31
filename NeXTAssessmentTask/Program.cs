@@ -13,12 +13,24 @@ namespace NeXTAssessmentTask
                 Console.WriteLine();
 
                 DateTime inputDate = DateTime.Parse(date);
+                inputDate = inputDate.AddHours(8);
                 Console.WriteLine(inputDate);
 
-                long unixTime = ((DateTimeOffset)inputDate).ToUnixTimeSeconds();
 
-                Console.WriteLine("UNIXTIMESTAMP : " + unixTime);
+                DateTime univDate = inputDate.ToUniversalTime();
+                univDate = univDate.AddMinutes(-60);
 
+                long[] unixTimestamps = new long[13];
+                for (int loop = 0; loop < 13; loop++)
+                {
+                    long unixTime = ((DateTimeOffset)univDate).ToUnixTimeSeconds();
+
+                    unixTimestamps[loop] = unixTime;
+                    Console.WriteLine(loop + 1 + ". " + univDate + " (UTC +0) " + unixTime);
+                    Console.WriteLine();
+
+                    univDate = univDate.AddMinutes(10);
+                }
             }
             catch (Exception ex)
             {
