@@ -1,5 +1,5 @@
 # NeXTAssessmentTask
-This is command line application created for NeXT Assessment to find the location of International Space Station (ISS) at a certain date and time.
+This is a command line application created for NeXT Assessment to find the location of International Space Station (ISS) at a certain date and time.
 Extension B is implemented in this assessment by returning the information through an API call. 
 This application is developed using C# language
 
